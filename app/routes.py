@@ -35,6 +35,7 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@login_required
 @app.route('/messages')
 def messages():
     messages = reversed(Message.query.order_by(Message.id.desc()).limit(6).all())
