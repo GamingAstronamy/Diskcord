@@ -7,7 +7,8 @@
         <title>Diskcord</title>
         {% endif %}
         <style>
-            @font-face { font-family: UniSans; src:'{{ url_for("static", filename="font/Uni Sans Heavy.otf") }}'; } 
+            @font-face { font-family: UniSans; src:'{{ url_for("static", filename="font/Uni Sans Heavy.otf") }}'; }
+            @font-face { font-family: ComicSans; src:'{{ url_for("static", filename="font/COMIC.TFF") }}'; }  
 
             html {
                 background-color: #23272a;
@@ -56,6 +57,7 @@
     <body>
         <div class='nav center'>
             {% if current_user.is_anonymous == False %}
+            <a href='{{ url_for("profile") }}'>Profile</a>
             <a href='{{ url_for("logout") }}'>Logout</a>
             {% endif %}
         </div>

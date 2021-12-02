@@ -30,6 +30,11 @@ def login():
 
     return render_template('login.html', title='Sign In', form=form)
 
+@app.route('/profile')
+@login_required
+def profile():
+    return 
+
 @app.route('/logout')
 def logout():
     logout_user()
