@@ -1,6 +1,6 @@
 {% for message in messages %}
 <div class='message'>
-        <p style='color:#fafafa; font-family: "Comic Sans MS", "Comic Sans";'>
+        <p style='color:#fafafa; {% if message.author.username == "Jun" %} font-family: "Comic Sans MS", "Comic Sans"; {% endif %}'>
                 <b style='color:{{ message.author.color }}; letter-spacing: 1px'>
                         {{ message.author.username }}:
                 </b>
