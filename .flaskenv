@@ -1,1 +1,1 @@
-FLASK_APP=diskord.py
+FLASK_APP=diskcord.py

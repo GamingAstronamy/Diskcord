@@ -35,15 +35,15 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@login_required
 @app.route('/messages')
+@login_required
 def messages():
     messages = reversed(Message.query.order_by(Message.id.desc()).limit(6).all())
     
     return render_template('messages.html', messages=messages)
 
-@login_required
 @app.route('/sendMessage')
+@login_required
 def sendMessage():
     content = request.args.get('message_content')
     newMessage = Message(content=content,author=current_user)
