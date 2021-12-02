@@ -1,0 +1,10 @@
+{% for message in messages %}
+<div class='message'>
+        <p style='color:#fafafa; font-family: "Comic Sans MS", "Comic Sans";'>
+                <b style='color:{{ message.author.color }}; letter-spacing: 1px'>
+                        {{ message.author.username }}:
+                </b>
+                {{ message.content }}
+        </p>
+</div>
+{% endfor %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class='title center'>Hello, {{ current_user.username }}</h1>
+
+    <hr>
+
+    <div class='scroll' id='messages'></div>
+    
+    <hr>
+    
+    <div>
+        <input type='text' id='message_box' class='message_box' placeholder='Message'></input>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        setInterval(updateMessages, 500);
+        function updateMessages()
+        {   
+            $.ajax({
+                url: '/messages',
+                type: 'get',
+                success: function(response){
+                    $('#messages').html(response);
+                }
+            });
+        };
+
+        $('#message_box').keyup(function(event){
+            var text = $(this).val();
+
+            if (event.key === 'Enter' && text != ''){
+                
+                $.ajax({
+                    url: '/sendMessage',
+                    type: 'get',
+                    data: {message_content : text},
+                });
+
+                $('#message_box').val('');
+            }
+        });
+    </script>
+
+{% endblock %}

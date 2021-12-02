@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - Dumbfuck Chat</title>
+        {% else %}
+        <title>Dumbfuck Chat</title>
+        {% endif %}
+        <style>
+            @font-face { font-family: UniSans; src:'{{ url_for("static", filename="font/Uni Sans Heavy.otf") }}'; } 
+
+            html {
+                background-color: #23272a;
+                font-family: UniSans, sans-serif;
+            }
+            div.scroll {
+                margin:auto;
+                padding:4px;
+                border-radius: 10px;
+                background: #2c2f33;
+                width: 95%;
+                height: 250px;
+                overflow-x: hidden;
+                overflow-y: scroll;
+                text-align: justify;
+            }
+            input.message_box {
+                display:block;
+                margin-right: auto;
+                margin-left: auto;
+                width: 95%;  
+                height: 50px;
+                font-size: 25px;
+                background-color: #2c2f33;
+                color: #fafafa;
+            }
+            .center {
+                text-align: center;
+            }
+            .nav {
+                width: 75px;
+                margin: auto;
+                border-radius: 15px;
+                background: #fafafa;
+            }
+            .message {
+                font-size: large;
+            }
+            .title {
+                border-radius: 15px;
+                background: #7289da;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class='nav center'>
+            {% if current_user.is_anonymous %}
+            <a href='{{ url_for("login") }}'>Login</a>
+            {% else %}
+            <a href='{{ url_for("logout") }}'>Logout</a>
+            {% endif %}
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
