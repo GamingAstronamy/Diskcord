@@ -55,9 +55,7 @@
     </head>
     <body>
         <div class='nav center'>
-            {% if current_user.is_anonymous %}
-            <a href='{{ url_for("login") }}'>Login</a>
-            {% else %}
+            {% if current_user.is_anonymous == False %}
             <a href='{{ url_for("logout") }}'>Logout</a>
             {% endif %}
         </div>
