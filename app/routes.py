@@ -42,6 +42,7 @@ def messages():
     
     return render_template('messages.html', messages=messages)
 
+@login_required
 @app.route('/sendMessage')
 def sendMessage():
     content = request.args.get('message_content')
