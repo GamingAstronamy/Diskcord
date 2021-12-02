@@ -38,7 +38,7 @@ def logout():
 @app.route('/messages')
 @login_required
 def messages():
-    messages = reversed(Message.query.order_by(Message.id.desc()).limit(6).all())
+    messages = reversed(Message.query.order_by(Message.id.desc()).limit(20).all())
     
     return render_template('messages.html', messages=messages)
 
