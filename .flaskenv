@@ -1,1 +1,1 @@
-FLASK_APP=dumbfuck_chat.py
+FLASK_APP=diskord.py
