@@ -33,7 +33,7 @@ def login():
 @app.route('/profile')
 @login_required
 def profile():
-    return 
+    return render_template('profile.html')
 
 @app.route('/logout')
 def logout():
