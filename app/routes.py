@@ -74,4 +74,3 @@ def setuserdata():
     db.session.commit()
 
     return {'response' : 'success'}
-
