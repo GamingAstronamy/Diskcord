@@ -3,9 +3,64 @@
 {% block content %}
     <h1 class='center white'>Profile</h1>
     <div class='center white'>
-        <label>Username:</label>
-        <b>{{ current_user.username }}</b>
-        <label>Nickname:</label>
-        <input type='text'></input> 
+        <p>
+            <label>Username:</label>
+            <b style='color:{{ current_user.color }};' id='profile_username'>{{ current_user.username }}</b>
+        </p>
+        <p>
+            <label>Nickname:</label>
+            <input type='text' class='profile_option_box' id='profile_option_box_nickname' value={{ current_user.nickname }}>
+        </p>
+        <p>
+            <label>Color:</label>
+            <input type='text' class='profile_option_box' id='profile_option_box_color' value={{ current_user.color }}>
+        </p>
+        <span>
+            <input type='submit' class='profile_submit' id='profile_submit_save' value='Save'>
+            <input type='submit' class='profile_submit' id='profile_submit_cancel' value='Cancel'>
+        </span>
     </div>
+
+    <script>
+        document.getElementById('profile_option_box_color').style.color = $('#profile_option_box_color').val();
+
+        $('#profile_option_box_color').keyup(function(){
+
+            if (/^#[0-9A-F]{6}$/i.test($('#profile_option_box_color').val())) {
+                document.getElementById('profile_option_box_color').style.color = $('#profile_option_box_color').val();
+                document.getElementById('profile_option_box_color').style.backgroundColor = '#2c2f33';
+            } else {
+                document.getElementById('profile_option_box_color').style.color = '#fafafa';
+                document.getElementById('profile_option_box_color').style.backgroundColor = '#F53B2C';
+            }
+
+        });
+
+        $('#profile_submit_cancel').click(function(){
+           $.ajax({
+               url: '/userdata',
+               type: 'get',
+               success: function(data) {
+                   console.log(data);
+                   $('#profile_option_box_nickname').val(data['nickname']);
+                   $('#profile_option_box_color').val(data['color']);
+                   document.getElementById('profile_option_box_color').style.color = data['color'];
+               }
+           });
+        });
+
+        $('#profile_submit_save').click(function(){
+            if (/^#[0-9A-F]{6}$/i.test($('#profile_option_box_color').val())) {
+                
+                $.ajax({
+                    url: '/setuserdata',
+                    type: 'get',
+                    data: {nickname : $('#profile_option_box_nickname').val(), color : $('#profile_option_box_color').val()}
+                })
+
+                document.getElementById('profile_username').style.color = $('#profile_option_box_color').val();
+
+            }
+        });
+    </script>
 {% endblock %}

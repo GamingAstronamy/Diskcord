@@ -43,7 +43,7 @@ def logout():
 @app.route('/messages')
 @login_required
 def messages():
-    messages = reversed(Message.query.order_by(Message.id.desc()).limit(20).all())
+    messages = Message.query.order_by(Message.id.desc()).all()
     
     return render_template('messages.html', messages=messages)
 
@@ -57,3 +57,21 @@ def sendMessage():
     db.session.commit()
 
     return {'response' : 'success'}
+
+@app.route('/userdata')
+@login_required
+def userdata():
+    return {'username' : current_user.username, 'nickname' : current_user.nickname, 'color' : current_user.color}
+
+@app.route('/setuserdata')
+@login_required
+def setuserdata():
+    nickname = request.args.get('nickname')
+    color = request.args.get('color')
+
+    current_user.nickname = nickname
+    current_user.color = color
+    db.session.commit()
+
+    return {'response' : 'success'}
+
