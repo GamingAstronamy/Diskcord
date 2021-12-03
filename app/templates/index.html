@@ -1,14 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class='title center'>Hello, {{ current_user.username }}</h1>
-
-
-    <div class='scroll' id='messages'></div>
-    
-    
-    <div>
-        <input type='text' id='message_box' class='message_box' placeholder='Message'></input>
+    <div style='margin:auto; border: 10px solid #7289da; border-radius: 5px; outline: solid 5px #2c2f33; width: 90%;'>
+        <div class='scroll' id='messages'></div>
+        <div>
+            <input type='text' id='message_box' class='message_box' placeholder='Message'></input>
+        </div>
     </div>
 
     <script>
