@@ -4,6 +4,7 @@ from app.form import LoginForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Message
 from werkzeug.urls import url_parse
+from datetime import timezone
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
@@ -43,9 +44,9 @@ def logout():
 @app.route('/messages')
 @login_required
 def messages():
-    messages = Message.query.order_by(Message.id.desc()).all()
+    messages = reversed(Message.query.order_by(Message.id.desc()).all())
     
-    return render_template('messages.html', messages=messages)
+    return render_template('messages.html', messages=messages, timezone=timezone)
 
 @app.route('/sendMessage')
 @login_required

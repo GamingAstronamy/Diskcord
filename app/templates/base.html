@@ -13,15 +13,19 @@
                 background-color: #23272a;
                 font-family: UniSans, sans-serif;
             }
-            div.scroll {
+            .scroll {
                 padding:4px;
-                border-radius: 10px;
+                border-radius: 20px;
                 background: #2c2f33;
                 width: 99%;
-                height: 250px;
+                height: 400px;
                 overflow-x: hidden;
                 overflow-y: scroll;
                 text-align: justify;
+                overflow-wrap: break-word;
+            }
+            .scroll::-webkit-scrollbar {
+                display: none;
             }
             input.message_box {
                 display:block;

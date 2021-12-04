@@ -9,8 +9,12 @@
     </div>
 
     <script>
-        setInterval(updateMessages, 500);
-        function updateMessages()
+        setInterval(update, 50);
+        setTimeout(scroll_down, 150);
+
+        var maxScrollDown = document.getElementById('messages').scrollHeight -  document.getElementById('messages').clientHeight;
+
+        function update()
         {   
             $.ajax({
                 url: '/messages',
@@ -19,6 +23,14 @@
                     $('#messages').html(response);
                 }
             });
+
+            
+            let new_maxScrollDown = document.getElementById('messages').scrollHeight -  document.getElementById('messages').clientHeight;
+
+            if (maxScrollDown != new_maxScrollDown && maxScrollDown - $('#messages').scrollTop() < 25){
+                $('#messages').scrollTop(new_maxScrollDown)
+                maxScrollDown = new_maxScrollDown;
+            }
         };
 
         $('#message_box').keyup(function(event){
@@ -35,6 +47,11 @@
                 $('#message_box').val('');
             }
         });
+
+        function scroll_down(){
+            var maxScrollDown = document.getElementById('messages').scrollHeight -  document.getElementById('messages').clientHeight
+            $('#messages').scrollTop(maxScrollDown)
+        }
     </script>
 
 {% endblock %}
