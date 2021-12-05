@@ -1,10 +1,9 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app, db
+from app import app, db, socketio, send
 from app.form import LoginForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Message
 from werkzeug.urls import url_parse
-from datetime import timezone
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
@@ -29,7 +28,7 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
 
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In', form=form, current_user = current_user)
 
 @app.route('/profile')
 @login_required
@@ -41,37 +40,30 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/messages')
-@login_required
-def messages():
-    messages = reversed(Message.query.order_by(Message.id.desc()).all())
-    
-    return render_template('messages.html', messages=messages, timezone=timezone)
+@socketio.on('connect')
+def connection():
+    messages = [message.toDict() for message in reversed(Message.query.order_by(Message.id.desc()).all())]
+    socketio.emit('message_database_change', messages)
 
-@app.route('/sendMessage')
-@login_required
-def sendMessage():
-    content = request.args.get('message_content')
-    newMessage = Message(content=content,author=current_user)
+@socketio.on('new_message')
+def new_message(message):
+    newMessage = Message(content=message,author=current_user)
 
     db.session.add(newMessage)
     db.session.commit()
 
-    return {'response' : 'success'}
+    messages = [message.toDict() for message in reversed(Message.query.order_by(Message.id.desc()).all())]
 
-@app.route('/userdata')
-@login_required
-def userdata():
-    return {'username' : current_user.username, 'nickname' : current_user.nickname, 'color' : current_user.color}
 
-@app.route('/setuserdata')
-@login_required
-def setuserdata():
-    nickname = request.args.get('nickname')
-    color = request.args.get('color')
+    socketio.emit('message_database_change', messages, broadcast=True)
 
-    current_user.nickname = nickname
-    current_user.color = color
+@socketio.on('userdata_request')
+def userdata_request():
+    userdata = current_user.toDict()
+    socketio.emit('userdata', userdata)
+
+@socketio.on('userdata_change')
+def userdata_change(userdata):
+    current_user.nickname = userdata['nickname']
+    current_user.color = userdata['color']
     db.session.commit()
-
-    return {'response' : 'success'}
