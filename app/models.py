@@ -1,5 +1,5 @@
 from app import db, login
-from datetime import datetime
+from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
@@ -15,6 +15,9 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
+    def toDict(self):
+        return {'id':self.id,'username':self.username,'nickname':self.nickname,'color':self.color} 
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -29,6 +32,9 @@ class Message(db.Model):
 
     def __repr__(self):
         return f'<Message {self.content}>'
+
+    def toDict(self):
+        return {'id':self.id, 'content': self.content, 'timestamp':self.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%A %m/%d/%Y %I:%M %p'), 'author':self.author.toDict()}
 
 @login.user_loader
 def load_user(id):
