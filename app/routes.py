@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from app import app, db, socketio, send
 from app.form import LoginForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Message
+from app.models import User, Message, Room
 from werkzeug.urls import url_parse
 
 @app.route('/')
@@ -39,6 +39,13 @@ def profile():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/room/<room_id>')
+def room(room_id):
+    if current_user in Room.query.get(room_id).users:
+        return render_template('room.html', room_id=room_id)
+
+    return redirect(url_for('index'))
 
 @socketio.on('connect')
 def connection():
