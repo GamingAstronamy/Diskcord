@@ -42,8 +42,7 @@ def logout():
 
 @socketio.on('connect')
 def connection():
-    messages = [message.toDict() for message in reversed(Message.query.order_by(Message.id.desc()).all())]
-    socketio.emit('message_database_change', messages)
+    update_messages()
 
 @socketio.on('new_message')
 def new_message(message):
@@ -52,10 +51,8 @@ def new_message(message):
     db.session.add(newMessage)
     db.session.commit()
 
-    messages = [message.toDict() for message in reversed(Message.query.order_by(Message.id.desc()).all())]
-
-
-    socketio.emit('message_database_change', messages, broadcast=True)
+    update_messages()
+   
 
 @socketio.on('userdata_request')
 def userdata_request():
@@ -67,3 +64,9 @@ def userdata_change(userdata):
     current_user.nickname = userdata['nickname']
     current_user.color = userdata['color']
     db.session.commit()
+
+    update_messages()
+
+def update_messages():
+    messages = [message.toDict() for message in reversed(Message.query.order_by(Message.id.desc()).all())]
+    socketio.emit('message_database_change', messages, broadcast=True)
