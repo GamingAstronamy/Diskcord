@@ -6,4 +6,4 @@ def make_shell_context():
     return {'db': db, 'User': User, 'Message': Message}
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0', port=443)
