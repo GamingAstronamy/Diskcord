@@ -34,11 +34,21 @@
                         for (let j = 0; j < 3; j++){
                             user = room['users'][j]
                             username = document.createElement('b')
-                            username.setAttribute('style', 'color:' + user.color + '; letter-spacing: 1px')
-                            username.appendChild(document.createTextNode(user['nickname']))
+                            username.setAttribute('style', 'margin: 1px; font-size:15px; color:#585e66')
+
+                            text = user['username']
+
+                            if (j != 2){
+                                text += '   '
+                            } else {
+                                text += ' ...'
+                            }
+
+                            username.appendChild(document.createTextNode(text))
 
                             data_row1.appendChild(username)
                         }
+
                     }
 
                     span.appendChild(data_row1);
