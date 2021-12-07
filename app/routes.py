@@ -56,7 +56,7 @@ def disconnect():
 
 @socketio.on('message_request')
 def message_request():
-    update_messages()
+    update_messages(current_user.current_room)
 
 @socketio.on('new_message')
 def new_message(message):
@@ -65,7 +65,7 @@ def new_message(message):
     db.session.add(newMessage)
     db.session.commit()
 
-    update_messages()
+    update_messages(current_user.current_room)
 
 @socketio.on('userdata_request')
 def userdata_request():
@@ -78,13 +78,14 @@ def userdata_change(userdata):
     current_user.color = userdata['color']
     db.session.commit()
 
-    update_messages()
+    for room in current_user.rooms:
+        update_messages(room.id)
 
 @socketio.on('room_request')
 def room_request():
     rooms = [room.toDict() for room in current_user.rooms]
     socketio.emit('room_update', rooms)
 
-def update_messages():
-    messages = [message.toDict() for message in Room.query.get(current_user.current_room).messages.all()]
-    socketio.emit('message_database_change', messages, room=current_user.current_room)
+def update_messages(room):
+    messages = [message.toDict() for message in Room.query.get(room).messages.all()]
+    socketio.emit('message_database_change', messages, room=room)

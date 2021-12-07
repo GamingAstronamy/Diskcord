@@ -3,59 +3,54 @@
 {% block content %}
     <h1 class='center white'>Your Rooms:</h1>
 
-    <div class='room_box white' id='room_list'></div>
+    <div style='display: block; margin: auto; width:75%'>
+        <div class='room_box white' id='room_list'></div>
+        <div class='room_box white' id='dm_list'></div>
+    </div>
 
     <script>
         $(document).ready(function(){
-            const socket = io.connect('http://192.168.86.100:443');
+            const socket = io.connect('http://127.0.0.1:5000');
 
             socket.emit('room_request')
 
             socket.on('room_update', function(rooms){
 
-                for (let i = 0; i < rooms.length; i++){
-                    room = rooms[i]
+                for (let i = 0; i < rooms.length; i += 3){
+                    room_group = document.createElement('div')
+                    room_group.setAttribute('class', 'room_box_group')
 
-                    span = document.createElement('span')
-                    span.setAttribute('class', 'room_box')
+                    for (let j = i; j < i + 3 && j < rooms.length; j++){
+                        room = rooms[j]
 
-                    room_name = document.createElement('h1')
-                    room_name.setAttribute('class', 'room_box')
-                    room_name.appendChild(document.createTextNode(room['name']))
-                    span.appendChild(room_name)
+                        room_div = document.createElement('div')
+                        room_div.setAttribute('class', 'room_box_data')
 
-                    span.appendChild(document.createElement('br'))
+                        room_name = document.createElement('h1')
+                        room_name.setAttribute('class', 'center')
+                        room_name.setAttribute('style', 'font-size:40px; margin:0')
+                        room_name.appendChild(document.createTextNode(room['name']))
 
+                        users_list = document.createElement('b')
+                        //users_list.setAttribute()
+                        users_list_text = ''
 
-                    data_row1 = document.createElement('span')
-                    data_row1.setAttribute('class', 'room_box_data')
+                        for (let k = 0; k < room['users'].length; k++){
+                            user = room['users'][k]
 
-                    if (room['users'].length > 3){
-                        for (let j = 0; j < 3; j++){
-                            user = room['users'][j]
-                            username = document.createElement('b')
-                            username.setAttribute('style', 'margin: 1px; font-size:15px; color:#585e66')
+                            users_list_text += user.username
 
-                            text = user['username']
-
-                            if (j != 2){
-                                text += '   '
-                            } else {
-                                text += ' ...'
-                            }
-
-                            username.appendChild(document.createTextNode(text))
-
-                            data_row1.appendChild(username)
                         }
 
+
+
+                        room_div.appendChild(room_name)
+
+                        room_group.appendChild(room_div)
                     }
-
-                    span.appendChild(data_row1);
-
-                    document.getElementById('room_list').appendChild(span)
-
+                    document.getElementById('room_list').appendChild(room_group)
                 }
+
 
             });
 
