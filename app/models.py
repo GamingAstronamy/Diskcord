@@ -18,6 +18,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     color = db.Column(db.String(64), default='#ffffff')
 
+    current_room = db.Column(db.Integer)
+
     messages = db.relationship('Message', backref='author', lazy='dynamic')
     rooms = db.relationship('Room', secondary='userroom')
 
@@ -25,7 +27,7 @@ class User(UserMixin, db.Model):
         return f'<User {self.username}>'
 
     def toDict(self):
-        return {'id':self.id,'username':self.username,'nickname':self.nickname,'color':self.color} 
+        return {'id':self.id,'username':self.username,'nickname':self.nickname,'color':self.color,'current_room':self.current_room} 
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -51,6 +53,9 @@ class Room(db.Model):
     name = db.Column(db.String(128))
     users = db.relationship('User', secondary='userroom')
     messages = db.relationship('Message', backref='room', lazy='dynamic')
+
+    def toDict(self):
+        return {'id':self.id, 'name':self.name, 'messages':[message.toDict() for message in self.messages], 'users':[user.toDict() for user in self.users]}
 
 
 @login.user_loader

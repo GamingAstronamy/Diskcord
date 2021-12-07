@@ -1,9 +1,10 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app, db, socketio, send
+from app import app, db, socketio
 from app.form import LoginForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Message, Room
 from werkzeug.urls import url_parse
+from flask_socketio import join_room, leave_room
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
@@ -28,7 +29,7 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
 
-    return render_template('login.html', title='Sign In', form=form, current_user = current_user)
+    return render_template('login.html', title='Sign In', form=form, current_user=current_user)
 
 @app.route('/profile')
 @login_required
@@ -40,26 +41,31 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/room/<room_id>')
-def room(room_id):
-    if current_user in Room.query.get(room_id).users:
-        return render_template('room.html', room_id=room_id)
-
-    return redirect(url_for('index'))
+@app.route('/room')
+@login_required
+def room():
+    return render_template('room.html', title='Room')
 
 @socketio.on('connect')
 def connection():
+    join_room(current_user.current_room)
+
+@socketio.on('disconnect')
+def disconnect():
+    leave_room(current_user.current_room)
+
+@socketio.on('message_request')
+def message_request():
     update_messages()
 
 @socketio.on('new_message')
 def new_message(message):
-    newMessage = Message(content=message,author=current_user)
+    newMessage = Message(content=message,author=current_user,room_id=current_user.current_room)
 
     db.session.add(newMessage)
     db.session.commit()
 
     update_messages()
-   
 
 @socketio.on('userdata_request')
 def userdata_request():
@@ -74,6 +80,11 @@ def userdata_change(userdata):
 
     update_messages()
 
+@socketio.on('room_request')
+def room_request():
+    rooms = [room.toDict() for room in current_user.rooms]
+    socketio.emit('room_update', rooms)
+
 def update_messages():
-    messages = [message.toDict() for message in reversed(Message.query.order_by(Message.id.desc()).all())]
-    socketio.emit('message_database_change', messages, broadcast=True)
+    messages = [message.toDict() for message in Room.query.get(current_user.current_room).messages.all()]
+    socketio.emit('message_database_change', messages, room=current_user.current_room)

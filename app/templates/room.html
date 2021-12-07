@@ -10,7 +10,9 @@
 
     <script>
         $(document).ready(function() {            
-            var socket = io.connect('https://www.diskcord.ga')
+            const socket = io.connect('http://192.168.86.100:443')
+
+            socket.emit('message_request')
 
             socket.on('message_database_change', function(messages){
 
