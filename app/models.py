@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
     nickname = db.Column(db.String(64), default=username)
     password_hash = db.Column(db.String(128))
     color = db.Column(db.String(64), default='#ffffff')
+    profile_picture = db.Column(db.String(128))
 
     current_room = db.Column(db.Integer)
 
