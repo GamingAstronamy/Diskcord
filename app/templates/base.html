@@ -6,6 +6,7 @@
         {% else %}
         <title>Diskcord</title>
         {% endif %}
+        <link rel="icon" href="{{ url_for('static', filename='photos/Diskcord.svg') }}">
         <style>
             @font-face { font-family: UniSans; src:'{{ url_for("static", filename="font/Uni Sans Heavy.otf") }}'; }
 
@@ -75,7 +76,6 @@
             div.room_entry{
                 margin: auto;
             }
-
             a{
                 color: #2c2f33;
             }
@@ -109,13 +109,14 @@
         <script src="https://cdn.socket.io/4.4.0/socket.io.min.js" integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-        <span class='nav center'>
+
+        <div class='nav center'>
                 {% if current_user.is_anonymous == False %}
                 <a href='{{ url_for("index") }}' class='nav_entry'>Home</a>
                 <a href='{{ url_for("profile") }}' class='nav_entry'>Profile</a>
                 <a href='{{ url_for("logout") }}' class='nav_entry'>Logout</a>
                 {% endif %}
-        </span>
+        </div>
         <hr>
         {% block content %}{% endblock %}
     </body>
