@@ -7,7 +7,6 @@ from flask import url_for
 userroom = db.Table('userroom',
     db.Column('user_id',db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('room_id',db.Integer, db.ForeignKey('room.id'), primary_key=True))
-    
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
