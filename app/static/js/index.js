@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    const socket = io.connect('http://www.diskcord.ga');
+    const socket = io.connect('https://www.diskcord.ga');
 
     socket.emit('room_request')
 
@@ -59,7 +59,7 @@ $(document).ready(function(){
 
             socket.emit('room_change_request', room_id)
 
-            window.location.href = "http://www.diskcord.ga/room";
+            window.location.href = "https://www.diskcord.ga/room";
 
         });
 
