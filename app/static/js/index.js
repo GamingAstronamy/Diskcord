@@ -9,7 +9,7 @@ $(document).ready(function(){
             let room = rooms[i]
             
             room_entry = document.createElement('div')
-            room_entry.setAttribute('class', 'room_entry')
+            room_entry.setAttribute('class', 'room_entry unselectable')
             room_entry.setAttribute('roomid', room['id'])
 
             console.log(room_entry.getAttribute('roomid'))

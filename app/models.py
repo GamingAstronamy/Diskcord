@@ -4,26 +4,22 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask import url_for
 
-class UserRoom(db.Model):
-    __tablename__ = 'userroom'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_ids = db.Column(db.Integer, db.ForeignKey('user.id'))
-    room_ids = db.Column(db.Integer, db.ForeignKey('room.id'))
+userroom = db.Table('userroom',
+    db.Column('user_id',db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('room_id',db.Integer, db.ForeignKey('room.id'), primary_key=True))
     
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
-    nickname = db.Column(db.String(64), default=username)
+    nickname = db.Column(db.String(64))
     password_hash = db.Column(db.String(128))
     color = db.Column(db.String(64), default='#ffffff')
-    profile_picture = db.Column(db.String(128))
 
     current_room = db.Column(db.Integer)
 
     messages = db.relationship('Message', backref='author', lazy='dynamic')
-    rooms = db.relationship('Room', secondary='userroom')
+    rooms = db.relationship('Room', secondary=userroom, lazy='subquery', backref=db.backref('users', lazy=True))
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -53,11 +49,16 @@ class Message(db.Model):
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
-    users = db.relationship('User', secondary='userroom')
     messages = db.relationship('Message', backref='room', lazy='dynamic')
 
     def toDict(self):
-        return {'id':self.id, 'name':self.name, 'messages':[message.toDict() for message in self.messages], 'users':[user.toDict() for user in self.users], 'image_url': url_for('static', filename='photos/room/'+ str(self.id) +'.png')}
+        return {
+            'id':self.id,
+            'name':self.name,
+            'messages':[message.toDict() for message in self.messages],
+            'users':[user.toDict() for user in self.users],
+            'image_url': url_for('static', filename='photos/room/'+ str(self.id) +'.png')
+            }
 
 
 @login.user_loader
