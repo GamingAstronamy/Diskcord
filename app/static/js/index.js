@@ -19,11 +19,7 @@ $(document).ready(function(){
             
             room_image = document.createElement('img')
             room_image.setAttribute('class', 'room_entry_image')
-            if (UrlExists(room['image_url'])) {
-                room_image.setAttribute('src', room['image_url'])
-            } else {
-                room_image.setAttribute('src', '/static/photos/DiskcordGrey.svg')
-            }
+            room_image.setAttribute('src', room['image_url'])
 
             room_name = document.createElement('h2')
             room_name.setAttribute('class', 'room_entry_name')
@@ -68,14 +64,6 @@ $(document).ready(function(){
         });
 
     });
-
-    function UrlExists(url)
-    {
-        var http = new XMLHttpRequest();
-        http.open('HEAD', url, false);
-        http.send();
-        return http.status!=404;
-    }
 
     
 });
