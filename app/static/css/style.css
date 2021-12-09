@@ -82,6 +82,7 @@ div.room_entry_hover{
     overflow-x: hidden;
     overflow-y: hidden;
     background: #42464d;
+    cursor: pointer;
 }
 div.room_data{
     margin: auto;

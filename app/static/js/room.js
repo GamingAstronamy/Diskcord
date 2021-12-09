@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    const socket = io.connect('http://www.diskcord.ga')
+    const socket = io.connect('https://www.diskcord.ga')
 
     socket.emit('message_request')
 
