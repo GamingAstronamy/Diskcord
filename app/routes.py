@@ -44,8 +44,11 @@ def logout():
 @app.route('/room')
 @login_required
 def room():
-    return render_template('room.html', title='Room')
-
+    if Room.query.get(current_user.current_room) in current_user.rooms:
+        return render_template('room.html', title='Room')
+    else:
+        return redirect(url_for('index'))
+    
 @socketio.on('connect')
 def connection():
     join_room(current_user.current_room)
@@ -85,6 +88,12 @@ def userdata_change(userdata):
 def room_request():
     rooms = [room.toDict() for room in current_user.rooms]
     socketio.emit('room_update', rooms)
+
+@socketio.on('room_change_request')
+def room_change_request(room_id):
+    current_user.current_room = room_id
+    db.session.commit()
+    
 
 def update_messages(room):
     messages = [message.toDict() for message in Room.query.get(room).messages.all()]

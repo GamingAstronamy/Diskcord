@@ -65,15 +65,27 @@ div.room_box::-webkit-scrollbar {
 }
 div.room_entry{
     display: block;
-    margin: auto;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    border-radius: 25px;
-    width: -webkit-calc(100% - 50px);
+    margin: 15px;
+    border-radius: 15px;
+    width: -webkit-calc(100% - 30px);
     height: 100px;
     overflow-x: hidden;
     overflow-y: hidden;
     background: #2c2f33;
+}
+div.room_entry_hover{
+    display: block;
+    margin: 15px;
+    border-radius: 15px;
+    width: -webkit-calc(100% - 30px);
+    height: 100px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background: #42464d;
+}
+div.room_data{
+    margin: auto;
+    float:left;
 }
 img.room_entry_image{
     margin: 10px;
@@ -84,7 +96,14 @@ img.room_entry_image{
 }
 h2.room_entry_name{
     margin: 10px;
-    float:left;
+    margin-bottom: 0px;
+    font-size: 40px;
+}
+h3.room_entry_users{
+    margin: 10px;
+    margin-top: 0px;
+    font-size: 15px;
+    color:#585e66;
 }
 a{
     color: #2c2f33;
