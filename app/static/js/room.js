@@ -67,8 +67,4 @@ $(document).ready(function() {
         }
     });
 
-    function scroll_down(){
-        var maxScrollDown = document.getElementById('messages').scrollHeight -  document.getElementById('messages').clientHeight
-        $('#messages').scrollTop(maxScrollDown)
-    }
 });

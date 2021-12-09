@@ -64,7 +64,27 @@ div.room_box::-webkit-scrollbar {
     display: none;
 }
 div.room_entry{
+    display: block;
     margin: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border-radius: 25px;
+    width: -webkit-calc(100% - 50px);
+    height: 100px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background: #2c2f33;
+}
+img.room_entry_image{
+    margin: 10px;
+    border-radius: 25px;
+    width: 80px;
+    height: 80px;
+    float:left;
+}
+h2.room_entry_name{
+    margin: 10px;
+    float:left;
 }
 a{
     color: #2c2f33;

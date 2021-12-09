@@ -2,6 +2,7 @@ from app import db, login
 from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from flask import url_for
 
 class UserRoom(db.Model):
     __tablename__ = 'userroom'
@@ -56,7 +57,7 @@ class Room(db.Model):
     messages = db.relationship('Message', backref='room', lazy='dynamic')
 
     def toDict(self):
-        return {'id':self.id, 'name':self.name, 'messages':[message.toDict() for message in self.messages], 'users':[user.toDict() for user in self.users]}
+        return {'id':self.id, 'name':self.name, 'messages':[message.toDict() for message in self.messages], 'users':[user.toDict() for user in self.users], 'image_url': url_for('static', filename='photos/room/'+ str(self.id) +'.png')}
 
 
 @login.user_loader
