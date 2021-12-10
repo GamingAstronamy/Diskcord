@@ -53,10 +53,6 @@ def room():
 def connection():
     join_room(current_user.current_room)
 
-@socketio.on('disconnect')
-def disconnect():
-    leave_room(current_user.current_room)
-
 @socketio.on('message_request')
 def message_request():
     update_messages(current_user.current_room)
@@ -91,9 +87,11 @@ def room_request():
 
 @socketio.on('room_change_request')
 def room_change_request(room_id):
-    current_user.current_room = room_id
-    db.session.commit()
-    
+    leave_room(current_user.current_room)
+    if room_id in current_user.rooms:
+        current_user.current_room = room_id
+        db.session.commit()
+        join_room(room_id)
 
 def update_messages(room):
     messages = [message.toDict() for message in Room.query.get(room).messages.all()]
